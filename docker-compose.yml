@@ -1,0 +1,38 @@
+version: '3'
+
+services:
+  react-app:
+    # Resolve create-react-app bug
+    stdin_open: true
+
+    # Add environment variable for react-app on Windows for hot reloading
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+
+    # Build using an explicit Dockerfile name
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+
+    # Refers to the ports (-p) parameter
+    ports:
+      - "3000:3000"
+
+    # Volumes mapping
+    volumes:
+      - /app/node_modules
+      # - .:/app # '.' maps to pwd
+      - //D_DRIVE/Documents/Academics/Courses/Udemy_Docker/section6_react-production/frontend:/app # '.' maps to pwd
+
+
+  tests:
+    # same build and volumes configuration
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    volumes:
+      - /app/node_modules
+      - //D_DRIVE/Documents/Academics/Courses/Udemy_Docker/section6_react-production/frontend:/app
+
+    # override starting command
+    command: ["npm", "test"]
