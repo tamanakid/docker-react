@@ -1,0 +1,20 @@
+language: generic 
+
+# superuser permissions are required in order to make use of docker
+sudo: required
+
+# specifies which dependencies TravisCI needs in its ""container"" (i.e. Docker CLI)
+services:
+	- docker
+
+
+# Series of commands executed before the tests are run (before the task at hand is executed?)
+# Here is the place to build the Docker image
+before_install:
+	- docker build -t tamanakid/docker-react -f Dockerfile.dev .
+
+
+# Series of commands to be executed to fulfill the desired tasks (run the test suite)
+# TravisCI will constantly watch the returned status code for each command in order to detect errors
+script:
+	- docker run -e CI=true tamanakid/docker-react npm test 
